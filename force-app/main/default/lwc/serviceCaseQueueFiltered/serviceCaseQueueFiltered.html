@@ -1,0 +1,26 @@
+<template>
+    <lightning-card icon-name="standard:case" title="Service Case Queue Filtered">
+        <lightning-button onclick={handleClickRefresh} label="Refresh" slot="actions"></lightning-button>
+            <div class="slds-var-p-around_small">
+                <div onitemregister={handleItemRegister}>
+                        <c-custom-datatable
+                            class="slds-max-medium-table_stacked"
+                            onvaluechange={handleValueChange}
+                            oncellchange={handleCellChange}
+                            data={records} columns={columns}
+                            show-row-number-column="false"
+                            key-field="Id"
+                            draft-values={draftValues}
+                            onsave={handleSave}
+                            data-record="Id"
+                            onedit={handleEdit}
+                            hide-checkbox-column="true"
+                            oncancel={handleCancel}>
+                        </c-custom-datatable>
+                </div>
+            </div>
+            <div class="showSpinner" if:true={showSpinner}>
+                <lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+            </div>
+    </lightning-card>
+</template>

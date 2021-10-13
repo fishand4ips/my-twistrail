@@ -1,0 +1,29 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" renderAs="pdf" controller="AccountCasesPdfCtrl">
+    <html>
+        <head>
+            <style>
+                @page {
+                    size: letter;
+                    margin: 25mm;
+                    @bottom-center {
+                        content: "Page " counter(page) " of " counter(pages);
+                        font-family: 'Arial', 'Helvetica', sans-serif;
+                        font-size: 10px;
+                    }
+                }   
+            </style>
+        </head>
+       </html>
+    <apex:form >
+        <apex:pageBlock title="Cases List" id="cases_list">
+            <apex:pageBlockTable value="{! accountCasesPrevWeek }" var="accountCases">
+                <apex:column value="{! accountCases.Account.Name }"/>
+                <apex:column value="{! accountCases.Owner.Name }"/>
+                <apex:column value="{! accountCases.CaseNumber }"/>
+                <apex:column value="{! accountCases.Status }"/>
+                <apex:column value="{! accountCases.Priority }"/>
+                <apex:column value="{! accountCases.Origin }"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
