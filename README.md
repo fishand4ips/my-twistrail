@@ -3,7 +3,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/fishand4ips/my-twistrail)
 ![GitHub language count](https://img.shields.io/github/languages/count/fishand4ips/my-twistrail?color=darkred)
 
-My example of a Twistrail curriculum implementation. The following skills are required to understand the current functionality: trigger types, apex, lightning web components, trigger framework, SOQLand basic CSS.
+My example of a Twistrail curriculum implementation. The following skills are required to understand the current functionality: trigger types, apex, lightning web components, trigger framework, SOQL, Custom Metadata and basic CSS.
 
 ## How Do You Plan to Deploy Your Changes?
 
