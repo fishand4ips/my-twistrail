@@ -1,10 +1,12 @@
 public with sharing class QueryUtils {
 
     private static List<GroupMember> existUserInQueue(String userId) {
-        return [SELECT Group.Id 
-                FROM GroupMember 
-                WHERE GroupId In (SELECT Id FROM Group WHERE type = 'Queue')
-                AND UserOrGroupId = :userId];
+        return [
+            SELECT Group.Id 
+            FROM GroupMember 
+            WHERE GroupId In (SELECT Id FROM Group WHERE type = 'Queue')
+            AND UserOrGroupId = :userId
+        ];
     }
 
     public static List<Id> existUserInQueueList(String userId) {

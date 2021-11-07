@@ -1,4 +1,4 @@
-<aura:component implements="flexipage:availableForRecordHome, force:hasRecordId">
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId">
     <aura:attribute name="newContact" type="Object" />
     <aura:attribute name="simpleNewContact" type="Object" />
     <aura:attribute name="newContactError" type="String" />

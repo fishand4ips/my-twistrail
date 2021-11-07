@@ -1,4 +1,4 @@
-<aura:component implements="flexipage:availableForRecordHome, force:hasRecordId">
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId">
     <!--inherit recordId attribute-->
     <aura:attribute name="record" type="Object" />
     <aura:attribute name="simpleRecord" type="Object" />

@@ -8,38 +8,53 @@ public class OpportunityTriggerHandler extends TriggerHandler {
 
     public override void beforeInsert() {   
         for (Opportunity opp : (List<Opportunity>) Trigger.new) {     
-            changerRecordTypeOpp(opp);
+            this.changerRecordTypeOpp(opp);
         }
     }
 
     public override void beforeUpdate() {
         List<Account_Interest__c> accInterest = new List<Account_Interest__c>();
         for (Opportunity opp : (List<Opportunity>) Trigger.new) {
-            changerRecordTypeOpp(opp);
-            generateAccountInterest(opp, accInterest);
-            removeAccountInterest(opp);
+            this.changerRecordTypeOpp(opp);
+            this.generateAccountInterest(opp, accInterest);
+            this.removeAccountInterest(opp);
         }
     }
 
     private void generateAccountInterest(Opportunity opp, List<Account_Interest__c> accInterest) {
-        List<OpportunityLineItem> relatedProdInfo = [SELECT Product2id, Product2.ProductCode, Product2.Name, Opportunity.Name 
-                                                     FROM OpportunityLineItem 
-                                                     WHERE OpportunityId IN :Trigger.new];
+        List<OpportunityLineItem> relatedProdInfo = [
+            SELECT Product2id, Product2.ProductCode, Product2.Name, Opportunity.Name 
+            FROM OpportunityLineItem 
+            WHERE OpportunityId IN :Trigger.new
+        ];
+
         for (OpportunityLineItem oppProd : relatedProdInfo) {
-            List<Object> parameters = new List<Object> {oppProd.Opportunity.Name, oppProd.Product2.ProductCode, oppProd.Product2.Name};
+            List<Object> parameters = new List<Object> {
+                oppProd.Opportunity.Name, 
+                oppProd.Product2.ProductCode, 
+                oppProd.Product2.Name
+            };
+
             String accInterestName = String.format('Opportunity: "{0}" with product code: "{1}" and name: "{2}"', parameters);
             if (opp.StageName == OPP_STAGE_CLOSED_WON) {
-                accInterest.add(new Account_Interest__c(Name = accInterestName,
-                                                        Deal_Link__c = opp.id, 
-                                                        Product_lookup__c = oppProd.Product2id,
-                                                        Account_lookup__c = opp.AccountId));
+                accInterest.add(new Account_Interest__c(
+                    Name = accInterestName,
+                    Deal_Link__c = opp.id, 
+                    Product_lookup__c = oppProd.Product2id,
+                    Account_lookup__c = opp.AccountId
+                ));
             }
         }
         insert accInterest;
     }
 
     private void removeAccountInterest(Opportunity opp) {
-        List<Account_Interest__c> accInterestList = [SELECT Id FROM Account_Interest__c WHERE Deal_link__c IN :Trigger.new];
+        List<Account_Interest__c> accInterestList = [
+            SELECT Id
+            FROM Account_Interest__c 
+            WHERE Deal_link__c IN :Trigger.new
+        ];
+
         if (((Opportunity)Trigger.oldMap.get(opp.Id)).StageName == OPP_STAGE_CLOSED_WON) {
             delete accInterestList;
         }
@@ -58,11 +73,10 @@ public class OpportunityTriggerHandler extends TriggerHandler {
     }
 
     private Map<String, Id> recordTypeOpportunity() {
-        Map<String, Id> opportunityRecordTypes = New Map<String, Id>();
-        for (RecordType rt: [SELECT DeveloperName, Id  FROM RecordType WHERE sObjectType = :OPPORTUNITY]) {
+        Map<String, Id> opportunityRecordTypes = new Map<String, Id>();
+        for (RecordType rt : [SELECT DeveloperName, Id FROM RecordType WHERE sObjectType = :OPPORTUNITY]) {
             opportunityRecordTypes.put(rt.DeveloperName, rt.Id);
         }
         return opportunityRecordTypes;
     }
-
 }

@@ -8,12 +8,12 @@ public class JSONContacts {
             jsonGen.writeStartArray();
             for(Contact con : conList){
                 jsonGen.writeStartObject();
-                jsonGen.writeStringField('ID',con.Id);
                 String firstName = String.isNotBlank(con.firstName) ? con.firstName : 'fisrtNameTest'; 
-                jsonGen.writeStringField('FirstName',firstName);
                 String lastName = String.isNotBlank(con.lastName) ? con.lastName : 'lastNameTest'; 
-                jsonGen.writeStringField('LastName',lastName);
                 String phone = String.isNotBlank(con.Phone) ? con.Phone : 'PhoneTest'; 
+                jsonGen.writeStringField('ID',con.Id);
+                jsonGen.writeStringField('FirstName',firstName);
+                jsonGen.writeStringField('LastName',lastName);
                 jsonGen.writeStringField('Phone',phone);
                 jsonGen.writeEndObject();
             }

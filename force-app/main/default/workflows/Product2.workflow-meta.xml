@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Update_Prod_Family_Arduino</fullName>
+        <field>Family</field>
+        <literalValue>Arduino Board</literalValue>
+        <name>Update Prod Family Arduino</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Prod_Family_Other</fullName>
+        <field>Family</field>
+        <literalValue>Other Board</literalValue>
+        <name>Update Prod Family Other</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Update Prod Family for Arduino</fullName>
+        <actions>
+            <name>Update_Prod_Family_Arduino</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>false</active>
+        <criteriaItems>
+            <field>Product2.ProductCode</field>
+            <operation>contains</operation>
+            <value>001,002,003</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update Prod Family for Other</fullName>
+        <actions>
+            <name>Update_Prod_Family_Other</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>false</active>
+        <criteriaItems>
+            <field>Product2.ProductCode</field>
+            <operation>contains</operation>
+            <value>004,005,006,007,008,009</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+</Workflow>
