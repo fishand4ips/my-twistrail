@@ -3,12 +3,17 @@ public inherited sharing class ServiceCaseQueueService {
     public static List<Case> getUserCases() {
         String userId = UserInfo.getUserId();
         List<Id> queueId = QueryUtils.existUserInQueueList(userId);
-        return [SELECT Owner.Name, Origin, OwnerId, Id, CaseNumber, AccountId, Account.Name, ContactId, Contact.Name, Status, Priority, Service_Flow_Completed__c
-                FROM Case
-                WHERE OwnerId IN :queueId OR OwnerId = :userId
-                WITH SECURITY_ENFORCED 
-                ORDER BY Priority_Range__c, CreatedDate DESC
-                LIMIT 25];
+        return [
+            SELECT Owner.Name, Origin, OwnerId, Id, CaseNumber, AccountId,
+            Account.Name, ContactId, Contact.Name, Status, Priority,
+            Service_Flow_Completed__c
+            FROM Case
+            WHERE OwnerId IN :queueId
+            OR OwnerId = :userId
+            WITH SECURITY_ENFORCED 
+            ORDER BY Priority_Range__c, CreatedDate DESC
+            LIMIT 25
+        ];
     }
 
     @AuraEnabled
