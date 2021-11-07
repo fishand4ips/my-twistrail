@@ -2,9 +2,12 @@ public class CreateUpdateMetadataProduct2 {
 
     @future
     public static void buildMetadata(ID recordId) {
-        Product2 current = [SELECT Name, Family, ProductCode
-                        FROM Product2 
-                        WHERE Id = :recordId];
+        Product2 current = [
+            SELECT Name, Family, ProductCode
+            FROM Product2 
+            WHERE Id = :recordId
+        ];
+        
         String prefixName ='Product_Family_by_Code_Mapping'; 
         String label = current.Name;
         String labelModify = label.replace(' ', '_');
@@ -17,8 +20,7 @@ public class CreateUpdateMetadataProduct2 {
         try {
             CreateUpdateMetadataUtils.createUpdateMetadata(fullName, labelModify, createMetadata);
         } catch(DmlException ex) {
-                System.debug(ex);
-            }
+            System.debug(ex);
+        }
     }
-
 }
