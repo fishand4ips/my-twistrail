@@ -1,0 +1,37 @@
+<template>
+    <template if:true={isErrorOccurred}>
+        <div class="slds-card slds-card slds-card_boundary">
+            <div class="slds-page-header slds-card__header slds-grid">
+                <header class="view-header slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-account" title={title}>
+                            <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                                <use xlink:href="/_slds/icons/standard-sprite/svg/symbols.svg#account"></use>
+                            </svg>
+                            <span class="slds-assistive-text">{title}</span>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <b>{title} cannot be displayed by reason: {error}</b>
+                        </h2>
+                    </div>
+                </header>
+            </div>
+        </div>
+    </template>
+    <template if:false={isErrorOccurred}>
+        <lightning-card title="Contacts List" icon-name="custom:custom63">
+            <div class="slds-m-around_medium">
+                {contacts}
+                <template if:true={contacts}>
+                    <template for:each={contacts} for:item="contact">
+                        {contact.FirstName}
+                    </template>
+                </template>
+            </div>
+        </lightning-card>
+    </template>
+
+    
+</template>
