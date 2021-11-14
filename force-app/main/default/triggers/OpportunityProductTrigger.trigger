@@ -1,3 +1,3 @@
 trigger OpportunityProductTrigger on OpportunityLineItem (before insert, before update, after insert, after update) {
-    new OpportunityProductTriggerHandler().run();
+    new OpportunityProductTriggerHandler(Trigger.new).run();
 }

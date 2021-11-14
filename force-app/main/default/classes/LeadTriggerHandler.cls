@@ -1,17 +1,21 @@
-public class LeadTriggerHandler extends TriggerHandler {
+public without sharing class LeadTriggerHandler extends TriggerHandler {
     private static final String DEFAULT_SETTINGS = 'Default_Lead_Score_Settings';
+    private List<Lead> newList;
+    private Map<Id, Lead> oldMap;
+
+    public LeadTriggerHandler(List<Lead> newList, Map<Id, Lead> oldMap) {
+        this.newList = newList;
+        this.oldMap = oldMap;
+    }
 
     public override void beforeUpdate() {
-        for (Lead leadItem : (List<Lead>) Trigger.new) {
+        for (Lead leadItem : newList) {
             computeLeadScore(leadItem, getDefaultLeadScoringMetadata(DEFAULT_SETTINGS));
         }
     }
 
     public override void afterInsert() {
-        List<Lead> leads = [SELECT Phone, Title, Email, Number_of_Students__c, Number_of_Sets_Required__c, Lead_Score__c
-                            FROM Lead
-                            WHERE Id IN :Trigger.new];
-        for (Lead leadItem : leads) {
+        for (Lead leadItem : newList) {
             computeLeadScore(leadItem, getDefaultLeadScoringMetadata(DEFAULT_SETTINGS));
         }
     }
@@ -85,7 +89,7 @@ public class LeadTriggerHandler extends TriggerHandler {
     private static void putLeadScoringMetadata(ID recordId, String serializedMd) {
         Map<String, String> createMetadata = (Map<String, String>)JSON.deserialize(serializedMd, Map<String, String>.class);
         String label = getLabel(recordId);
-        String prefixName ='Lead_Scoring_Settings'; 
+        String prefixName = 'Lead_Scoring_Settings'; 
         String fullName = prefixName + '.' + label;
         CreateUpdateMetadataUtils.createUpdateMetadata(fullName, label, createMetadata); 
     }
@@ -99,7 +103,12 @@ public class LeadTriggerHandler extends TriggerHandler {
     }
 
     private static String getLabel(ID recordId) {
-        Lead current = [SELECT Name FROM Lead WHERE Id = :recordId];
+        Lead current = [
+            SELECT Name
+            FROM Lead 
+            WHERE Id = :recordId
+            WITH SECURITY_ENFORCED
+        ];
         return current.Name.replace(' ', '_');
     }
 

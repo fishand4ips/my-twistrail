@@ -1,4 +1,4 @@
-public class CustomNotification {
+public without sharing class CustomNotification {
 
     private String title {get; set;}
     private String body {get; set;}
@@ -6,9 +6,11 @@ public class CustomNotification {
     private String targetId {get; set;}
 
     Messaging.CustomNotification notification = new Messaging.CustomNotification();
-    CustomNotificationType notificationType = [SELECT Id, DeveloperName 
-                                               FROM CustomNotificationType 
-                                               WHERE DeveloperName = 'New_or_Assigned_Back_Case'];
+    CustomNotificationType notificationType = [
+        SELECT Id, DeveloperName
+        FROM CustomNotificationType 
+        WHERE DeveloperName = 'New_or_Assigned_Back_Case'
+    ];
 
     public CustomNotification(String body, String title, Set<String> recipientsIds, String targetId) {
         this.body = body;

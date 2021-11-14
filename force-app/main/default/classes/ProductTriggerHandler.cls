@@ -1,31 +1,29 @@
-public class ProductTriggerHandler extends TriggerHandler {
+public without sharing class ProductTriggerHandler extends TriggerHandler {
 
     private List<Product2> newList = new List<Product2>();
-    private List<Product2> oldList = new List<Product2>();
-    private Map<Id, Product2> newMap = new Map<Id, Product2>();
     private Map<Id, Product2> oldMap = new Map<Id, Product2>();
     private static final String ERROR_INFO_NOT_EXISTS_PRODUCT_CODE = 'Such product code is not allowed in the system. Please update the PFC mapping or contact administrator.';
 
-    public ProductTriggerHandler(List<Product2> newList, List<Product2> oldList, Map<Id, Product2> newMap, Map<Id, Product2> oldMap) {
+    public ProductTriggerHandler(List<Product2> newList, Map<Id, Product2> oldMap) {
         this.newList = newList;
-        this.oldList = oldList;
-        this.newMap = newMap;
         this.oldMap = oldMap;
     }
 
     public override void afterInsert() {
         List<Product2> finalProd = new List<Product2>();
-        List<Product2> products = [SELECT ProductCode, Family FROM Product2 WHERE Id IN :newList];
-
-        for (Product2 product : products) {
+        List<Product2> products = new List<Product2>();
+        for (Product2 product : newList) {
             if (isExistsProductCode()) {
                 selectorProductFamilyBoard(product);
-                update product;
+                products.add(product);
                 CreateUpdateMetadataProduct2.buildMetadata(product.Id);
             } else {
                 newList.get(0).addError(ERROR_INFO_NOT_EXISTS_PRODUCT_CODE);
                 break;
             }
+        }
+        if (products.size() > 0) {
+            update products;
         }
     }
 
@@ -45,6 +43,7 @@ public class ProductTriggerHandler extends TriggerHandler {
             SELECT Id, Product_Family__c, Product2.Family 
             FROM OpportunityLineItem 
             WHERE Product2Id IN :newList
+            WITH SECURITY_ENFORCED
         ];
 
         for (OpportunityLineItem oppProductItem : relatedOppProducts) {

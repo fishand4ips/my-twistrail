@@ -6,6 +6,7 @@ public with sharing class QueryUtils {
             FROM GroupMember 
             WHERE GroupId In (SELECT Id FROM Group WHERE type = 'Queue')
             AND UserOrGroupId = :userId
+            WITH SECURITY_ENFORCED
         ];
     }
 

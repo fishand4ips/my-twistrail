@@ -1,4 +1,4 @@
-public class OpportunityTriggerHandler extends TriggerHandler {
+public without sharing class OpportunityTriggerHandler extends TriggerHandler {
 
     private List<Opportunity> newList = new List<Opportunity>();
     private Map<Id, Opportunity> oldMap = new Map<Id, Opportunity>();
@@ -32,6 +32,7 @@ public class OpportunityTriggerHandler extends TriggerHandler {
             SELECT Product2id, Product2.ProductCode, Product2.Name, Opportunity.Name 
             FROM OpportunityLineItem 
             WHERE OpportunityId IN :newList
+            WITH SECURITY_ENFORCED
         ];
 
         for (OpportunityLineItem oppProd : relatedProdInfo) {
@@ -55,16 +56,21 @@ public class OpportunityTriggerHandler extends TriggerHandler {
     }
 
     private void removeAccountInterest(List<Opportunity> opportunities) {
+        Boolean isDelete = false;
         List<Account_Interest__c> accInterestList = [
             SELECT Id
             FROM Account_Interest__c 
             WHERE Deal_link__c IN :opportunities
+            WITH SECURITY_ENFORCED
         ];
 
         for (Opportunity opportunity : opportunities) {
             if ((oldMap.get(opportunity.Id)).StageName == OPP_STAGE_CLOSED_WON) {
-                delete accInterestList;
+                isDelete = true;
             }
+        }
+        if (isDelete && Schema.sObjectType.Account_Interest__c.isDeletable()) {
+            delete accInterestList;
         }
     }
 

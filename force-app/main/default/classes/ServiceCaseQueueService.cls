@@ -22,12 +22,16 @@ public inherited sharing class ServiceCaseQueueService {
             JSON.serialize(data),
             List<Case>.class
         );
-        try {
-            update caseForUpdate;
-            return 'Success: Case updated successfully';
-        }
-        catch (Exception e) {
-            return 'The following exception has occurred: ' + e.getMessage();
+        if (Schema.sObjectType.Case.isUpdateable()) {
+            try {
+                update caseForUpdate;
+                return 'Success: Case updated successfully';
+            }
+            catch (Exception e) {
+                return 'The following exception has occurred: ' + e.getMessage();
+            }
+        } else {
+            return 'You do not access for update Case';
         }
     }
 }

@@ -34,7 +34,6 @@ public virtual class TriggerHandler {
 
     addToLoopCount();
 
-    System.debug('------context-----' + context);
     // dispatch to the correct handler method
     if(this.context == TriggerContext.BEFORE_INSERT) {
       this.beforeInsert();
