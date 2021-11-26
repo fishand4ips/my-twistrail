@@ -1,0 +1,122 @@
+<aura:component controller="AdvancedRelatedListController" implements="flexipage:availableForAllPageTypes,force:hasRecordId" >
+    
+    <!-- Attributes -->
+	<aura:attribute name="objectName" 	type="String" required="true" access="global"/>
+    <aura:attribute name="fieldsName" 	type="String" required="true" access="global"/>
+    <aura:attribute name="headerName" 	type="String" required="true" access="global"/>
+    <aura:attribute name="isEditable" 	type="Boolean" 	access="global" default="false" />
+    <aura:attribute name="iconName" 	type="String" 	access="global" default="standard:contact" />
+    
+    <aura:attribute name="records" 		type="List" access="private" />
+    <aura:attribute name="recordsCopy" 	type="List" access="private" />
+    <aura:attribute name="fields" 		type="List" access="private" />
+    
+    <!-- Events -->
+	<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    
+    <div><div class="ARL">
+        <div class="headerDiv slds-clearfix">
+            <div class="slds-float_left slds-p-around_xx-small">
+                <span>
+                    <lightning:icon iconName="{!v.iconName}" alternativeText="icon" size="small" />
+                </span>
+                <span class="slds-p-around_small">{!v.headerName}&nbsp;({!v.records.length})</span>
+            </div>
+            <div class="slds-float_right">
+                <lightning:buttonIcon iconName="utility:refresh" alternativeText="refresh" onclick="{!c.doInit}"/>
+            </div>
+        </div>
+        <div class="childTable">
+            <table class="customDataTable slds-table slds-table_bordered slds-table_edit slds-table_fixed-layout" role="grid">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <aura:iteration items="{!v.fields}" var="field">
+                            <th>
+                                <span>{!field.label}</span>
+                            </th>
+                        </aura:iteration>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.records}" var="rcrd" indexVar="index">
+                        <tr>
+                            <aura:iteration items="{!rcrd.record}" var="data">
+                                <td class="{!if(and(rcrd.editMode, data.isEdit), '', 'slds-truncate')}">
+                                    <aura:if isTrue="{!and(data.ltngType ne 'picklist', data.ltngType ne 'checkbox')}">
+                                        <aura:if isTrue="{!and(rcrd.editMode, data.isEdit)}">
+                                            <lightning:input type="{!data.ltngType}"
+                                                             variant="label-hidden"
+                                                             value="{!data.value}"
+                                                             name="{!rcrd.Id}"
+                                                             validity="false"/>
+                                            <aura:set attribute="else">
+                                                <aura:if isTrue="{!data.ltngType eq 'text'}">
+                                                    <span>{!data.value}</span>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'id'}">
+                                                    <span>{!data.value}</span>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'tel'}">
+                                                    <lightning:formattedPhone value="{!data.value}" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'email'}">
+                                                    <lightning:formattedEmail value="{!data.value}" hideIcon="true"/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'url'}">
+                                                    <lightning:formattedUrl value="{!data.value}" target="_blank" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'date'}">
+                                                    <lightning:formattedDateTime value="{!data.value}"/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'datetime'}">
+                                                    <lightning:formattedDateTime value="{!data.value}" year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                                                    minute="2-digit" timeZoneName="short" hour12="true"/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'number'}">
+                                                    <lightning:formattedNumber value="{!data.value}"/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'time'}">
+                                                    <lightning:formattedTime value="{!data.value}" />
+                                                </aura:if>
+                                            </aura:set>
+                                        </aura:if>
+                                    </aura:if>
+                                    <aura:if isTrue="{!data.ltngType eq 'picklist'}">
+                                        <aura:if isTrue="{!and(rcrd.editMode, data.isEdit)}">
+                                            <lightning:combobox name="{!rcrd.Id}" variant="label-hidden" value="{!data.value}" options="{!data.picklistOptions}" />
+                                            <aura:set attribute="else">
+                                                <span>{!data.value}</span>
+                                            </aura:set>
+                                        </aura:if>
+                                    </aura:if>
+                                    <aura:if isTrue="{!data.ltngType eq 'checkbox'}">
+                                        <aura:if isTrue="{!and(rcrd.editMode, data.isEdit)}">
+                                            <lightning:input type="checkbox" name="{!rcrd.Id}" checked="{!data.value}" variant="label-hidden"/>
+                                            <aura:set attribute="else">
+                                                <lightning:input type="checkbox" name="{!rcrd.Id}" checked="{!data.value}" disabled="true" variant="label-hidden"/>
+                                            </aura:set>
+                                        </aura:if>
+                                    </aura:if>
+                                </td>
+                            </aura:iteration>
+                            <aura:if isTrue="{!v.isEditable}">
+                                <aura:if isTrue="{!!rcrd.editMode}">
+                                    <td class="slds-truncate">
+                                        <lightning:buttonIcon name="{!rcrd.Id}" onclick="{!c.editRow}" iconName="utility:edit" variant="container" />
+                                    </td>
+                                    <aura:set attribute="else">
+                                        <td class="slds-truncate">
+                                            <lightning:buttonIcon name="{!rcrd.Id}" class="checkIco" onclick="{!c.saveRow}" iconName="utility:check" alternativeText="Save" />&nbsp;
+                                            <lightning:buttonIcon name="{!rcrd.Id}" class="closeIco" onclick="{!c.resetRow}" iconName="utility:close" alternativeText="Reset" />
+                                        </td>
+                                    </aura:set>
+                                </aura:if>
+                            </aura:if>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </div>
+    </div></div>
+</aura:component>

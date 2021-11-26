@@ -1,0 +1,31 @@
+.THIS .ARL {
+    border-radius: 4px;
+    background: #eee;
+    border: 1px solid #ddd;
+}
+.THIS .ARL .headerDiv {
+    padding: 18px;
+    background-color: #F3F2F2;
+    font-size: 16px;
+    font-weight: 700;
+}
+.THIS .ARL .childTable {
+    min-height: 230px;
+    height: 230px;
+    overflow: auto;
+}
+.THIS .ARL .slds-table_edit thead th {
+    padding: 4px 8px;
+}
+/* For Scrolling */
+.THIS ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+.THIS ::-webkit-scrollbar-track {
+   display: none !important;
+}
+.THIS ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(0,0,0,0.4);
+}

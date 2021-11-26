@@ -1,4 +1,4 @@
-public without sharing class LeadTriggerHandler extends TriggerHandler {
+public class LeadTriggerHandler extends TriggerHandler {
     private static final String DEFAULT_SETTINGS = 'Default_Lead_Score_Settings';
     private List<Lead> newList;
     private Map<Id, Lead> oldMap;

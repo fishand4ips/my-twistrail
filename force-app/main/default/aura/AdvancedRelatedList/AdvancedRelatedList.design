@@ -1,0 +1,7 @@
+<design:component label="Advanced Related List">
+    <design:attribute name="headerName" label="Header Title" />
+    <design:attribute name="objectName" label="Object"/>
+    <design:attribute name="fieldsName" label="Fields(comma seprated API Names)"/>
+    <design:attribute name="isEditable" label="Inline Editable Cells" />
+    <design:attribute name="iconName" label="Icon Name" />
+</design:component>

@@ -1,37 +1,110 @@
 <template>
-    <template if:true={isErrorOccurred}>
-        <div class="slds-card slds-card slds-card_boundary">
-            <div class="slds-page-header slds-card__header slds-grid">
-                <header class="view-header slds-media slds-media_center slds-has-flexi-truncate">
-                    <div class="slds-media__figure">
-                        <span class="slds-icon_container slds-icon-standard-account" title={title}>
-                            <svg class="slds-icon slds-icon_small" aria-hidden="true">
-                                <use xlink:href="/_slds/icons/standard-sprite/svg/symbols.svg#account"></use>
-                            </svg>
-                            <span class="slds-assistive-text">{title}</span>
-                        </span>
+    <div if:true={isLoading}>
+        <template if:false={error}>
+            <template if:false={contacts.length}>
+                <div class="slds-card slds-card slds-card_boundary">
+                    <div class="slds-page-header slds-card__header slds-grid">
+                        <header class="view-header slds-media slds-media_center slds-has-flexi-truncate">
+                            <div class="slds-media__figure">
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                        <b>This Account don't have related contacts</b>
+                                    </h2>
+                                </div>
+                            </div>
+                        </header>
                     </div>
-                    <div class="slds-media__body">
-                        <h2 class="slds-card__header-title">
-                            <b>{title} cannot be displayed by reason: {error}</b>
-                        </h2>
+                </div>
+            </template>
+            <template if:true={contacts.length}>
+                <lightning-card title="Contacts List" icon-name="custom:custom63">
+                    <lightning-button onclick={handleMode} label={modeBtn} slot="actions"></lightning-button>
+                    <div if:true={modeEdit}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered" border="1" cellspacing="0" cellpadding="0" bordercolor="#ccc" style="border-collapse:collapse;">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Title</th>
+                                    <th>Account Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={contacts} for:item="contact">
+                                    <tr key={contact.id}>
+                                        <td><lightning-input required type="text" value={contact.firstName} data-id={contact.id} data-field="firstName" onchange={handleChange}></lightning-input></td>
+                                        <td><lightning-input required type="text" value={contact.lastName} data-id={contact.id} data-field="lastName" onchange={handleChange}></lightning-input></td>
+                                        <td><lightning-input type="email" value={contact.email} data-id={contact.id} data-field="email" onchange={handleChange}></lightning-input></td>
+                                        <td><lightning-input type="text" value={contact.title} data-id={contact.id} data-field="title" onchange={handleChange}></lightning-input></td>
+                                        <td>
+                                            <c-custom-lookup 
+                                                    object-name="Account" 
+                                                    field-name="Name" 
+                                                    placeholder="search Account" 
+                                                    icon-name="standard:account"
+                                                    value={contact.accountName}
+                                                >
+                                            </c-custom-lookup>
+                                            <!-- <lightning-input type="text" value={contact.accountName} data-id={contact.id} data-field="accountName" onchange={handleChange}></lightning-input> -->
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                        <div class="slds-clearfix" style="margin: 15px 25px;">
+                            <div class="slds-float_left">
+                                <lightning-button variant="neutral" label="Cancel" icon-name="utility:back" icon-position="left" onclick={handleMode}></lightning-button>
+                            </div>
+                            <div class="slds-float_right">
+                                <lightning-button variant="brand" disabled={disabledSaveBtn} label="Save" icon-name="utility:save" icon-position="left" onclick={handleSave}></lightning-button>
+                            </div>
+                          </div>
                     </div>
-                </header>
+                    <div if:false={modeEdit}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered" border="1" cellspacing="0" cellpadding="0" bordercolor="#ccc" style="border-collapse:collapse;">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Title</th>
+                                    <th>Account Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={contacts} for:item="contact">
+                                    <tr key={contact.id}>
+                                        <td>{contact.firstName}</td>
+                                        <td>{contact.lastName}</td>
+                                        <td>{contact.email}</td>
+                                        <td>{contact.title}</td>
+                                        <td>{contact.accountName}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </lightning-card>
+            </template>    
+        </template>
+        <template if:true={error}>
+            <div class="slds-card slds-card slds-card_boundary">
+                <div class="slds-page-header slds-card__header slds-grid">
+                    <header class="view-header slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <div class="slds-media__body">
+                                <h2 class="slds-card__header-title">
+                                    <b>{title} cannot be displayed by reason: {error}</b>
+                                </h2>
+                            </div>
+                        </div>
+                    </header>
+                </div>
             </div>
-        </div>
-    </template>
-    <template if:false={isErrorOccurred}>
-        <lightning-card title="Contacts List" icon-name="custom:custom63">
-            <div class="slds-m-around_medium">
-                {contacts}
-                <template if:true={contacts}>
-                    <template for:each={contacts} for:item="contact">
-                        {contact.FirstName}
-                    </template>
-                </template>
-            </div>
-        </lightning-card>
-    </template>
-
-    
+        </template>
+    </div>
+    <div if:false={isLoading}>
+        <lightning-spinner size="small" variant="brand" alternative-text="Loading..."></lightning-spinner>
+    </div>
 </template>
