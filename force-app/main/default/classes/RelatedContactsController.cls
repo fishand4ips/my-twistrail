@@ -22,32 +22,10 @@ public with sharing class RelatedContactsController {
         try {
             List<ContactWrapper> cWraps = (List<ContactWrapper>) JSON.deserialize(JSON.serialize(contactsInfo), List<ContactWrapper>.class);
             List<Contact> contactsToUpdate = new List<Contact>();
-            List<Account> accToInsert = new List<Account>();
-            Set<Id> accountIds = new Set<Id>();
-            List<String> fullNames = new List<String>();
-
-            List<Account> fullListAccounts = [
-                SELECT Id, Name
-                FROM Account 
-                LIMIT 50000
-            ];
-
-            for (Account acc : fullListAccounts) {
-                fullNames.add(acc.Name);
-            }
 
             for (ContactWrapper w : cWraps) {
                 contactsToUpdate.add(w.toContact());
             }
-
-            List<Account> crtListAccounts = [
-                SELECT Id, Name
-                FROM Account 
-                WHERE Id IN :accountIds
-            ];
-
-
-            System.debug('c::: ' + contactsToUpdate);
 
             if (Schema.sObjectType.Contact.isUpdateable()) {
                 update contactsToUpdate;

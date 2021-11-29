@@ -3,6 +3,7 @@ import fetchRecords from '@salesforce/apex/CustomLookupController.fetchRecords';
 
 export default class CustomLookup extends LightningElement {
 
+    @api accountName;
     @api objectName;
     @api fieldName;
     @api value;
@@ -42,6 +43,7 @@ export default class CustomLookup extends LightningElement {
                 this.value = this.selectedRecord.value;
                 this.showDropdown = false;
                 this.showPill = true;
+                this.changeValueAccount(this.value);
             }
         }
     }
@@ -92,5 +94,14 @@ export default class CustomLookup extends LightningElement {
         if(!this.value) {
             this.showDropdown = true;
         }
+    }
+
+    changeValueAccount(value) {
+        const event = new CustomEvent('value', {
+            detail: {
+                value: value
+            }
+        });
+        this.dispatchEvent(event);
     }
 }

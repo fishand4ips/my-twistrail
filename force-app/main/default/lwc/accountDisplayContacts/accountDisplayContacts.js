@@ -4,6 +4,8 @@ import saveContacts from '@salesforce/apex/RelatedContactsController.saveContact
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class AccountDisplayContacts extends LightningElement {
+
+    @api value;
     @api recordId;
     @api objectApiName;
     @api title;
@@ -22,7 +24,6 @@ export default class AccountDisplayContacts extends LightningElement {
         getRelatedList({recordId: recordId})
         .then(result => {
             this.contacts = result;
-            console.log('success: '+ JSON.stringify(result));
         }) 
         .catch(error => {
             this.error = error;
@@ -34,6 +35,7 @@ export default class AccountDisplayContacts extends LightningElement {
     }
 
     handleSave() {
+        this.isLoading = false;
         this.updateContacts();
         this.handleMode();
     }
@@ -41,13 +43,14 @@ export default class AccountDisplayContacts extends LightningElement {
     updateContacts() {
         console.log('before save>>> ' + JSON.stringify(this.contacts));
         saveContacts({contactsInfo: this.contacts})
-        .then((result) => {
+        .then(() => {
+            this.fetchRelatedRecordInfo(this.recordId);
             this.displayMessage('Success', 'Contacts was successfully updated!', 'success');
-            console.log('result>>> ' + result);
         })
         .catch((error) => {
-            this.displayMessage('Error', error.body.message, 'error');
             console.error('error>>> ' + JSON.stringify(error));
+            this.isLoading = true;
+            this.displayMessage('Error', error.body.message, 'error');
         })
     }
 
@@ -76,5 +79,13 @@ export default class AccountDisplayContacts extends LightningElement {
             variant: eventVariant,
         });
         this.dispatchEvent(evt);
+    }
+
+    handleValue(event) {
+        this.contacts.forEach(contact => {
+            if (contact.id == event.target.dataset.id) {
+                contact.accountId = event.detail.value;
+            }
+        })
     }
 }

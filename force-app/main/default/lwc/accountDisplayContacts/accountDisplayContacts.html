@@ -3,7 +3,7 @@
         <template if:false={error}>
             <template if:false={contacts.length}>
                 <div class="slds-card slds-card slds-card_boundary">
-                    <div class="slds-page-header slds-card__header slds-grid">
+                    <div class="slds-page-header slds-grid">
                         <header class="view-header slds-media slds-media_center slds-has-flexi-truncate">
                             <div class="slds-media__figure">
                                 <div class="slds-media__body">
@@ -43,7 +43,11 @@
                                                     field-name="Name" 
                                                     placeholder="search Account" 
                                                     icon-name="standard:account"
-                                                    value={contact.accountName}
+                                                    data-id={contact.id}
+                                                    data-field="accountName"
+                                                    account-name={contact.accountName}
+                                                    onchange={handleChange}
+                                                    onvalue={handleValue}
                                                 >
                                             </c-custom-lookup>
                                             <!-- <lightning-input type="text" value={contact.accountName} data-id={contact.id} data-field="accountName" onchange={handleChange}></lightning-input> -->

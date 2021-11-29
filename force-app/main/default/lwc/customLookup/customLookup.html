@@ -12,7 +12,18 @@
             <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
                 <!-- Search Input Box -->
                 <template if:false={showPill}>
-                    <lightning-input value={value} onchange={searchRecords} onclick={showRecords} onblur={blurEvent} class="inputBox" type="search" autocomplete="off" variant="label-hidden" placeholder={placeholder}></lightning-input>
+                    <lightning-input
+                        value={accountName}
+                        onchange={searchRecords}
+                        onclick={showRecords}
+                        onblur={blurEvent}
+                        class="inputBox"
+                        type="search"
+                        autocomplete="off"
+                        variant="label-hidden"
+                        placeholder={placeholder}
+                        >
+                    </lightning-input>
                     <div if:true={showSpinner}>
                         <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
                     </div>
