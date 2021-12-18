@@ -1,4 +1,4 @@
-public class LeadTriggerHandler extends TriggerHandler {
+public without sharing class LeadTriggerHandler extends TriggerHandler {
     private static final String DEFAULT_SETTINGS = 'Default_Lead_Score_Settings';
     private List<Lead> newList;
     private Map<Id, Lead> oldMap;
@@ -89,7 +89,7 @@ public class LeadTriggerHandler extends TriggerHandler {
     private static void putLeadScoringMetadata(ID recordId, String serializedMd) {
         Map<String, String> createMetadata = (Map<String, String>)JSON.deserialize(serializedMd, Map<String, String>.class);
         String label = getLabel(recordId);
-        String prefixName = 'Lead_Scoring_Settings'; 
+        String prefixName ='Lead_Scoring_Settings'; 
         String fullName = prefixName + '.' + label;
         CreateUpdateMetadataUtils.createUpdateMetadata(fullName, label, createMetadata); 
     }
@@ -103,12 +103,7 @@ public class LeadTriggerHandler extends TriggerHandler {
     }
 
     private static String getLabel(ID recordId) {
-        Lead current = [
-            SELECT Name
-            FROM Lead 
-            WHERE Id = :recordId
-            WITH SECURITY_ENFORCED
-        ];
+        Lead current = [SELECT Name FROM Lead WHERE Id = :recordId];
         return current.Name.replace(' ', '_');
     }
 

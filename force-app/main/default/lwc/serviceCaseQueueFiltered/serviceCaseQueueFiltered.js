@@ -35,7 +35,6 @@ const COLUMNS = [{
         label: 'Status',
         fieldName: STATUS_FIELD.fieldApiName,
         type: 'picklist',
-        editable: true,
         wrapText: true,
         typeAttributes: {
             placeholder: 'Choose Status',
