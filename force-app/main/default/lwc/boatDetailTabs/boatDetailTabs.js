@@ -1,8 +1,6 @@
 import { wire, LightningElement, track } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
-
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
-
 import labelDetails from '@salesforce/label/c.Details';
 import labelReviews from '@salesforce/label/c.Reviews';
 import labelAddReview from '@salesforce/label/c.Add_Review';

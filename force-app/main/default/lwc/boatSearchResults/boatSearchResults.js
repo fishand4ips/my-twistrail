@@ -64,11 +64,6 @@ export default class BoatSearchResults extends LightningElement {
         publish(this.messageContext, BOATMC, { recordId: boatId });
     }
   
-    // The handleSave method must save the changes in the Boat Editor
-    // passing the updated fields from draftValues to the 
-    // Apex method updateBoatList(Object data).
-    // Show a toast message with the title
-    // clear lightning-datatable draft values
     handleSave(event) {
         const updatedFields = event.detail.draftValues;
         updateBoatList({data: updatedFields})
