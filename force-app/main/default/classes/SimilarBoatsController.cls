@@ -5,9 +5,7 @@ public class SimilarBoatsController {
     public Integer mainBoatYear { get; set; }
     public Id mainBoatId { get; set; }
 
-    //visualforce page attribute
     public Boat__c boat { get; private set; }
-    //visualforce page controller
     public SimilarBoatsController() {
         Id boatId = ApexPages.currentPage().getParameters().get('id');
         System.debug('boatId: ' + boatId);

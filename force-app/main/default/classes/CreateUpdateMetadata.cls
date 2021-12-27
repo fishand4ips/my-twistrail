@@ -21,7 +21,7 @@ public class CreateUpdateMetadata {
         try {
             CreateUpdateMetadataUtils.createUpdateMetadata(fullName, labelModify, createMetadata);
         } catch(DmlException ex) {
-                System.debug(ex);
-            }
+            System.debug('Failed sent metadata: ' + ex.getMessage());
+        }
     }
 }

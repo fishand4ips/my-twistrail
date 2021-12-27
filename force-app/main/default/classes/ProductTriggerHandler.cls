@@ -15,17 +15,19 @@ public without sharing class ProductTriggerHandler extends TriggerHandler {
 
     public override void afterInsert() {
         List<Product2> finalProd = new List<Product2>();
+        List<Product2> products = [SELECT ProductCode, Family FROM Product2 WHERE Id IN :newList];
 
-        for (Product2 product : newList) {
+        for (Product2 product : products) {
             if (isExistsProductCode()) {
                 selectorProductFamilyBoard(product);
-                update product;
+                finalProd.add(product);
                 CreateUpdateMetadataProduct2.buildMetadata(product.Id);
             } else {
-                newList.get(0).addError(ERROR_INFO_NOT_EXISTS_PRODUCT_CODE);
+                products.get(0).addError(ERROR_INFO_NOT_EXISTS_PRODUCT_CODE);
                 break;
             }
         }
+        update finalProd;
     }
 
     public override void beforeUpdate() {
