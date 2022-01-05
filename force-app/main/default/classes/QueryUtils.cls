@@ -4,7 +4,7 @@ public with sharing class QueryUtils {
         return [
             SELECT Group.Id 
             FROM GroupMember 
-            WHERE GroupId In (SELECT Id FROM Group WHERE type = 'Queue')
+            WHERE GroupId IN (SELECT Id FROM Group WHERE type = 'Queue')
             AND UserOrGroupId = :userId
         ];
     }

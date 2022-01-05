@@ -13,7 +13,6 @@ public with sharing class ProductController {
                 WITH SECURITY_ENFORCED
                 LIMIT 20
             ];
-            System.debug('products: ' + products);
             for (Product2 product : products) {
                 if (product != null || product.PricebookEntries != null) {
                     for (PricebookEntry entry : product.PricebookEntries) {
@@ -21,7 +20,6 @@ public with sharing class ProductController {
                     }
                 }
             }
-            System.debug('wrap: ' + wProds);
         } catch (Exception e) {
             throw new AuraHandledException('Failed fecth Products: ' + e.getMessage());
         }
@@ -33,10 +31,10 @@ public with sharing class ProductController {
     }
 
     @AuraEnabled
-    public static List<PricebookEntry> getPricebookEntry() {
-        List<PricebookEntry> pricebook;
+    public static List<PricebookEntry> getPricebookEntries() {
+        List<PricebookEntry> pricebookEntries;
         try {
-            pricebook = new List<PricebookEntry>([
+            pricebookEntries = new List<PricebookEntry>([
                 SELECT Id, Product2Id, UnitPrice, Product2.Description, Pricebook2.IsStandard, Pricebook2.Name
                 FROM PricebookEntry
                 WITH SECURITY_ENFORCED
@@ -44,7 +42,31 @@ public with sharing class ProductController {
         } catch (Exception e) {
             throw new AuraHandledException('Failed fetch Price Book Entry: ' + e.getMessage());
         }
-        return pricebook;
+        if (pricebookEntries.isEmpty()) {
+            return new List<PricebookEntry>();
+        }
+        return pricebookEntries;
+    }
+
+    @AuraEnabled
+    public static List<Pricebook2> getPricebooks() {
+        List<Pricebook2> pricebooks;
+        try {
+            pricebooks = new List<Pricebook2>([
+                SELECT Id, Description, IsStandard, Name, (
+                    SELECT Id, UnitPrice
+                    FROM PricebookEntries
+                )
+                FROM Pricebook2
+                WITH SECURITY_ENFORCED
+            ]);
+        } catch (Exception e) {
+            throw new AuraHandledException('Failed fetch Price Book: ' + e.getMessage());
+        }
+        if (pricebooks.isEmpty()) {
+            return new List<Pricebook2>();
+        }
+        return pricebooks;
     }
 
     class ProductWrapper {
@@ -85,7 +107,7 @@ public with sharing class ProductController {
         @AuraEnabled
         public String pricebookId;
 
-        ProductWrapper(Product2 product, PricebookEntry entry) {
+        public ProductWrapper(Product2 product, PricebookEntry entry) {
             this.productId = product.Id;
             this.url = formUrl(product.Id);
             this.name = product.Name;

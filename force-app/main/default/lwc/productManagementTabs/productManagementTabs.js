@@ -1,7 +1,8 @@
 import { LightningElement, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import fetchProducts from '@salesforce/apex/ProductController.getProducts';
-import fetchPricebookEntry from '@salesforce/apex/ProductController.getPricebookEntry';
+import fetchPricebookEntries from '@salesforce/apex/ProductController.getPricebookEntries';
+import fetchPricebooks from '@salesforce/apex/ProductController.getPricebooks';
 
 const CURRENT_PAGE = 1;
 const PAGE_LENGTH = 10;
@@ -11,6 +12,7 @@ export default class ProductManagementTabs extends LightningElement {
     @track isLoading = true;
     @track products;
     @track pricebooks;
+    @track pricebookEntries;
     @track page = CURRENT_PAGE;
     @track pageLength = PAGE_LENGTH;
     @track totalProducts;
@@ -44,6 +46,8 @@ export default class ProductManagementTabs extends LightningElement {
 
     connectedCallback() {
         this._fetchProducts();
+        this._fetchPricebookEntries();
+        this._fetchPricebooks();
     }
 
     _fetchProducts() {
@@ -51,15 +55,15 @@ export default class ProductManagementTabs extends LightningElement {
             .then(products => {
                 if (products.length) {
                     this.products = products;
-                    console.log('pr>>>> ' + JSON.stringify(products));
                     this.totalProducts = products.length;
                     this.initialProducts = this.products;
+                    console.log('products::: ' + JSON.stringify(products));
                 } else {
                     this.message = 'No Product records'
                 }
             })
-            .catch(error => {
-                console.error(error);
+            .catch(errorProducts => {
+                console.error('error::: ' + errorProducts);
                 this.displayMessage('Error', error.body.message, 'error');
             })
             .finally(() => {
@@ -67,12 +71,25 @@ export default class ProductManagementTabs extends LightningElement {
             });
     }
 
-    _fetchPricebookEntry() {
-        fetchPricebookEntry()
+    _fetchPricebookEntries() {
+        fetchPricebookEntries()
+            .then(pricebookEntries => {
+                console.log('entries::: ' + JSON.stringify(pricebookEntries));
+                this.pricebookEntries = pricebookEntries;
+            })
+            .catch(errorPricebookEntries => {
+                console.error('error::: ' + errorPricebookEntries);
+            })
+    }
+
+    _fetchPricebooks() {
+        fetchPricebooks()
             .then(pricebooks => {
                 this.pricebooks = pricebooks;
-                console.log('type pricebooks: ' + typeof pricebooks);
-                console.log('pricebooks: ' + JSON.stringify(pricebooks));
+                console.log('pricebooks::: ' + JSON.stringify(pricebooks));
+            })
+            .catch(errorPricebooks => {
+                console.error('error::: ' + errorPricebooks);
             })
     }
 
@@ -90,8 +107,7 @@ export default class ProductManagementTabs extends LightningElement {
             a = a[colName] ? a[colName].toLowerCase() : '';
             b = b[colName] ? b[colName].toLowerCase() : '';
             return a > b ? 1 * isReverse : -1 * isReverse;
-        });;
-
+        });
     }
 
     handleKeyChange(event) {  
@@ -135,8 +151,8 @@ export default class ProductManagementTabs extends LightningElement {
         let results = [];
         if (this.page >= 1) {
             this.page = this.page - 1;
-            for (let i = 0; i < this.pageLength; i++){
-                if ((i + (this.page * this.pageLength)) < this.totalProducts){
+            for (let i = 0; i < this.pageLength; i++) {
+                if ((i + (this.page * this.pageLength)) < this.totalProducts) {
                     results.push(this.products[i + (this.page * this.pageLength)]);
                 }            
             }

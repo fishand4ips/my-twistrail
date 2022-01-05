@@ -10,7 +10,7 @@
             <div if:true={products}>
                 <div class="slds-float_right">        
                     <lightning-input type="search" onblur={handleKeyChange} class="slds-m-bottom_small" label="Search" maxlength="100">  
-                    </lightning-input>  
+                    </lightning-input>
                 </div>
                 <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
                         <thead>
@@ -30,12 +30,12 @@
                                     Product SKU code
                                 </a>
                             </th>
-                            <template for:each={products} for:item="product">
-                                <th class="" scope="col" key={product.pricebookId}>
+                            <template for:each={pricebooks} for:item="pricebook">
+                                <td class="" scope="col" key={pricebook.Id}>
                                     <a class="slds-th__action slds-text-link_reset" role="button" tabindex="0" onclick={sortRecs} name="ProductPrice">
-                                        <span>{product.pricebookName}</span>
+                                        <span>{pricebook.Name}</span>
                                     </a>
-                                </th>
+                                </td>
                             </template>
                         </tr>
                     </thead>
@@ -51,20 +51,18 @@
                                 <td data-label="ProductCode">
                                     <div class="slds-cell-wrap">{product.productCode}</div>
                                 </td>
-                                <template for:each={products} for:item="product">
-                                    <td class="" scope="col" key={product.pricebookId}>
-                                        <a class="slds-th__action slds-text-link_reset" role="button" tabindex="0" onclick={sortRecs} name="ProductPrice">
-                                            <span>{product.unitPrice}</span>
-                                        </a>
+                               <template for:each={pricebooks} for:item="pricebook">
+                                    <td data-label="Pricebook" key={pricebook.Id}>
+                                        <div class="slds-cell-wrap">{pricebook.Id}</div>
                                     </td>
-                                </template>
+                               </template>
                             </tr>
                         </template>
                     </tbody>
                 </table>
                <div style="padding-top: 20px;">
                     <div class="slds-col">
-                        <div style={controlPagination}>
+                        <div>
                             <div class="slds-col slds-p-bottom_xx-small">
                                 <span class={controlPrevious}>
                                     <lightning-button-icon icon-name="utility:left" variant="bare" size="medium" alternative-text="Previous Page" onclick={previousPage}></lightning-button-icon>
