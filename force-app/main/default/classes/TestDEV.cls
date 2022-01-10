@@ -7,13 +7,13 @@ public with sharing class TestDEV {
                 SELECT Id 
                 FROM Account 
                 WHERE CreatedDate > TODAY
+                WITH SECURITY_ENFORCED
             ];
         } catch (CustomException ex) {
             System.debug('Custom Exception.');
         } catch (QueryException ex) {
             System.debug('Query Exception.');
-        }
-        finally {
+        } finally {
             System.debug('Done.');
         }
         return theAccount;
@@ -48,7 +48,7 @@ public with sharing class TestDEV {
     }
 
     public static void question118() {
-        For(List<Lead> theseLeads : [Select LastName, Company, Email From Lead LIMIT 20000]) {
+        for (List<Lead> theseLeads : [Select LastName, Company, Email From Lead LIMIT 20000]) {
            System.debug(theseLeads);
         }
     }
