@@ -48,7 +48,6 @@ export default class AccountDisplayContacts extends LightningElement {
         this.isLoading = false;
         this.updateContacts();
         this.handleMode();
-        test();
     }
 
     updateContacts() {

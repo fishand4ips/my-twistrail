@@ -19,7 +19,7 @@ public class CreateUpdateMetadataProduct2 {
 
         try {
             CreateUpdateMetadataUtils.createUpdateMetadata(fullName, labelModify, createMetadata);
-        } catch(DmlException ex) {
+        } catch(Exception ex) {
             System.debug(ex);
         }
     }

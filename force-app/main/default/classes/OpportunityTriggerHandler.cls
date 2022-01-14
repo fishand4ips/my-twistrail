@@ -72,9 +72,9 @@ public class OpportunityTriggerHandler extends TriggerHandler {
         for (Opportunity opportunity : opportunities) {
             if (opportunity != null) {
                 if (opportunity.Number_of_Students__c > 50) {
-                    opportunity.RecordTypeID = recordTypeOpportunity().get(CAMPUS_SALE_RECORD_TYPE);
+                    opportunity.RecordTypeID = getRecordTypesOpportunity().get(CAMPUS_SALE_RECORD_TYPE);
                 } else if (opportunity.Number_of_Students__c >= 0 && opportunity.Number_of_Students__c <= 50) {
-                    opportunity.RecordTypeID = recordTypeOpportunity().get(GROUP_SALE_RECORD_TYPE);
+                    opportunity.RecordTypeID = getRecordTypesOpportunity().get(GROUP_SALE_RECORD_TYPE);
                 } else {
                     opportunity.addError(ERROR_INFO_FOR_NUMBER_OF_STUDENTS);
                 }
@@ -82,7 +82,7 @@ public class OpportunityTriggerHandler extends TriggerHandler {
         }
     }
 
-    private Map<String, Id> recordTypeOpportunity() {
+    private Map<String, Id> getRecordTypesOpportunity() {
         Map<String, Id> opportunityRecordTypes = new Map<String, Id>();
         for (RecordType rt : [SELECT DeveloperName, Id FROM RecordType WHERE sObjectType = :OPPORTUNITY]) {
             opportunityRecordTypes.put(rt.DeveloperName, rt.Id);

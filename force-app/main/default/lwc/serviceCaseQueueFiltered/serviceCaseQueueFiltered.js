@@ -349,7 +349,7 @@ export default class ServiceCaseQueueFiltered extends NavigationMixin(LightningE
         });
     }
 
-    async handleSave(event) {
+    handleSave(event) {
         event.preventDefault();
         this.showSpinner = true;
         let currentStatus = event.detail.draftValues[0].Status;
@@ -359,7 +359,7 @@ export default class ServiceCaseQueueFiltered extends NavigationMixin(LightningE
                 currentServiceFlowComplited = record.Service_Flow_Completed__c;
             }
         })
-        await updateCase({ data: this.draftValues })
+        updateCase({ data: this.draftValues })
             .then(() => {
                 if (!currentServiceFlowComplited && currentStatus === 'Closed') {
                     this.dispatchEvent(
@@ -400,9 +400,9 @@ export default class ServiceCaseQueueFiltered extends NavigationMixin(LightningE
             });
     }
 
-    async handleClickRefresh() {
+    handleClickRefresh() {
         this.showSpinner = true;
-        await updateCase({ data: this.draftValues })
+        updateCase({ data: this.draftValues })
             .then(() => {
                 refreshApex(this.wiredRecords).then(() => {
                     this.draftValues = [];
