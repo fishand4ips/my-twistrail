@@ -1,0 +1,86 @@
+<template>
+    <div class="slds-box slds-theme--default">
+        <div class="slds-text-color_inverse slds-text-heading_large" style="padding:0.5rem;background:#16325c">        
+            Products
+        </div>
+        <div if:false={isLoading}>
+            <div if:false={products}>
+                <span class="message">{message}</span>
+            </div>
+            <div if:true={products}>
+                <div class="slds-float_right">        
+                    <lightning-input type="search" onblur={handleKeyChange} class="slds-m-bottom_small" label="Search" maxlength="100">  
+                    </lightning-input>
+                </div>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                        <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <a class="slds-th__action slds-text-link_reset" role="button" tabindex="0" onclick={sortRecs} name="Name">
+                                    Name
+                                </a>
+                            </th>
+                            <th class="" scope="col">
+                                <a class="slds-th__action slds-text-link_reset" role="button" tabindex="0" onclick={sortRecs} name="Description">
+                                    Description
+                                </a>
+                            </th>
+                            <th class="" scope="col">
+                                <a class="slds-th__action slds-text-link_reset" role="button" tabindex="0" onclick={sortRecs} name="ProductsSKUCode">
+                                    Product SKU code
+                                </a>
+                            </th>
+                            <template for:each={pricebooks} for:item="pricebook">
+                                <td class="" scope="col" key={pricebook.Id}>
+                                    <a class="slds-th__action slds-text-link_reset" role="button" tabindex="0" onclick={sortRecs} name="ProductPrice">
+                                        <span>{pricebook.Name}</span>
+                                    </a>
+                                </td>
+                            </template>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={products} for:item="product">
+                            <tr class="slds-hint-parent" key={product.id}>
+                                <td data-label="Product Name">
+                                    <div class="slds-cell-wrap"><a href={product.url}>{product.name}</a></div>
+                                </td>
+                                <td data-label="Description">
+                                    <div class="slds-cell-wrap max-width">{product.description}</div>
+                                </td>
+                                <td data-label="ProductCode">
+                                    <div class="slds-cell-wrap">{product.productCode}</div>
+                                </td>
+                               <template for:each={pricebooks} for:item="pricebook">
+                                    <td data-label="Pricebook" key={pricebook.Id}>
+                                        <div class="slds-cell-wrap">{product.unitPrice}</div>
+                                    </td>
+                               </template>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+               <div style="padding-top: 20px;">
+                    <div class="slds-col">
+                        <div>
+                            <div class="slds-col slds-p-bottom_xx-small">
+                                <span class={controlPrevious}>
+                                    <lightning-button-icon icon-name="utility:left" variant="bare" size="medium" alternative-text="Previous Page" onclick={previousPage}></lightning-button-icon>
+                                </span>
+                                <label class="slds-text-color_weak slds-p-horizontal_x-small" for="pageNum">Page:</label> 
+                                <span>{currentPage}</span>
+                                <span>&nbsp;of&nbsp;<b id="totalPage">{totalPage}</b></span>
+                                <span class={controlNext}>
+                                    <lightning-button-icon icon-name="utility:right" variant="bare" size="medium" alternative-text="Next Page" onclick={nextPage} class="slds-p-horizontal_x-small"></lightning-button-icon>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+            </div>
+        </div>
+        <div if:true={isLoading}>
+            <lightning-spinner size="medium" variant="brand" alternative-text="Loading..."></lightning-spinner>
+        </div>
+    </div>
+</template>

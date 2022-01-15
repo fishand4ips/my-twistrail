@@ -1,0 +1,47 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <template if:true={isPicklistValuesExist}>
+        <div class="slds-box slds-p-around_none">
+            <div class="slds-page-header">
+                <div class="slds-page-header__name-title">
+                    <div class="slds-grid">
+                        <div class="slds-col slds-has-flexi-truncate firstHeaderRow">
+                            <h2 class="slds-card__header-title">
+                                <lightning-icon
+                                    class="slds-m-right_small"
+                                    icon-name="standard:case" 
+                                    size="small" 
+                                    alternative-text="Cases" 
+                                    title="Cases">
+                                </lightning-icon>
+                                <div class="slds-media__body slds-align-middle">
+                                    <span class="slds-truncate slds-m-right--xx-small" title="Cases">Cases</span>
+                                </div>
+                            </h2>
+                        </div>
+                        <div class="slds-col slds-no-flex slds-grid slds-align-bottom">
+                            <lightning-button-icon
+                                class="slds-p-around_xx-small" 
+                                icon-name="utility:refresh" 
+                                alternative-text="Refresh" 
+                                onclick={refresh}>
+                            </lightning-button-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <c-custom-lightning-datatable
+                key-field="id"
+                data={data}
+                columns={columnsList}
+                draft-values={draftValues}
+                onpicklistchanged={picklistChanged}
+                onrowaction={callRowAction}
+                hide-checkbox-column>
+            </c-custom-lightning-datatable>
+            <div if:true={showLoadingSpinner}>
+                <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+            </div>
+        </div>
+    </template>
+</template>

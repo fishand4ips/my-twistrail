@@ -50,4 +50,4 @@ export default class SimilarBoats extends NavigationMixin(LightningElement) {
             },
         });
     }
-} 
+}

@@ -1,0 +1,29 @@
+.picklist-container,
+.lookup-container{
+    width : 90%;
+    margin: 0 auto;
+}
+
+[lightning-combobox_combobox-host]{
+    margin-bottom: 7px;
+    margin-top: 7px;
+
+}
+
+.slds-truncate {
+    max-width: 100%;
+    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.slds-form-element__label:empty {
+    margin: 0;
+    display: none;
+}
+
+th.slds-has-focus, td.slds-has-focus{
+    box-shadow: none !important;
+}

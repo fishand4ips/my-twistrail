@@ -31,7 +31,7 @@ public inherited sharing class ServiceCaseQueueService {
                 return 'The following exception has occurred: ' + e.getMessage();
             }
         } else {
-            return 'You do not access for update Case';
+            return 'You don\'t access for update Case';
         }
     }
 }

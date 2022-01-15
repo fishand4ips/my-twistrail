@@ -19,13 +19,14 @@ public without sharing class ProductTriggerHandler extends TriggerHandler {
         for (Product2 product : newList) {
             if (isExistsProductCode()) {
                 selectorProductFamilyBoard(product);
-                update product;
+                finalProd.add(product);
                 CreateUpdateMetadataProduct2.buildMetadata(product.Id);
             } else {
-                newList.get(0).addError(ERROR_INFO_NOT_EXISTS_PRODUCT_CODE);
+                product.addError(ERROR_INFO_NOT_EXISTS_PRODUCT_CODE);
                 break;
             }
         }
+        update finalProd;
     }
 
     public override void beforeUpdate() {

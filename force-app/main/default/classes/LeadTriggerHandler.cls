@@ -89,7 +89,7 @@ public without sharing class LeadTriggerHandler extends TriggerHandler {
     private static void putLeadScoringMetadata(ID recordId, String serializedMd) {
         Map<String, String> createMetadata = (Map<String, String>)JSON.deserialize(serializedMd, Map<String, String>.class);
         String label = getLabel(recordId);
-        String prefixName ='Lead_Scoring_Settings'; 
+        String prefixName = 'Lead_Scoring_Settings'; 
         String fullName = prefixName + '.' + label;
         CreateUpdateMetadataUtils.createUpdateMetadata(fullName, label, createMetadata); 
     }

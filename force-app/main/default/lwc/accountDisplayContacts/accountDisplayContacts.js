@@ -17,12 +17,15 @@ export default class AccountDisplayContacts extends LightningElement {
     @track disabledSaveBtn = true;
 
     connectedCallback() {
-        this.fetchRelatedRecordInfo(this.recordId);
+        if (this.recordId) {
+            this.fetchRelatedRecordInfo(this.recordId);
+        }
     }
 
     fetchRelatedRecordInfo(recordId) {
         getRelatedList({recordId: recordId})
         .then(result => {
+            this.addLinkIntoContacts(result);
             this.contacts = result;
         }) 
         .catch(error => {
@@ -34,6 +37,13 @@ export default class AccountDisplayContacts extends LightningElement {
         }) 
     }
 
+    addLinkIntoContacts(contacts) {
+        return contacts.map(contact => {
+            contact["link"] = '/' + contact.id
+            return contact
+        })
+    }
+
     handleSave() {
         this.isLoading = false;
         this.updateContacts();
@@ -41,7 +51,6 @@ export default class AccountDisplayContacts extends LightningElement {
     }
 
     updateContacts() {
-        console.log('before save>>> ' + JSON.stringify(this.contacts));
         saveContacts({contactsInfo: this.contacts})
         .then(() => {
             this.fetchRelatedRecordInfo(this.recordId);

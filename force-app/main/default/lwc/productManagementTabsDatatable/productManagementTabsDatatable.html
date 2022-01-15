@@ -1,0 +1,35 @@
+<template>
+    <lightning-card>
+        <lightning-button onclick={handleClickRefresh} label="Refresh" slot="actions"></lightning-button>
+            <div class="slds-var-p-around_small">
+                <div onitemregister={handleItemRegister}>
+                        <c-custom-datatable
+                            columns={columns}
+                            data={products}
+                            key-field="Id"
+                            data-record="Id">
+                        </c-custom-datatable>
+                </div>
+            </div>
+            <div class="show-spinner" if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+            </div>
+    </lightning-card>
+</template>
+
+
+   
+<!-- <template>
+    <lightning-card title="WireListView" icon-name="custom:custom67">
+        <template if:true={listView.data}>
+            <div class="slds-var-m-around_medium">
+                <template for:each={contacts} for:item="contact">
+                    <p key={contact.fields.Id.value}>
+                        {contact.fields.Name.value}
+                    </p>
+                </template>
+            </div>
+        </template>
+            Get the records for a list view using @wire.
+    </lightning-card>
+</template> -->

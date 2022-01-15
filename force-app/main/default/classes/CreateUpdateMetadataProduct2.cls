@@ -8,7 +8,7 @@ public class CreateUpdateMetadataProduct2 {
             WHERE Id = :recordId
         ];
         
-        String prefixName ='Product_Family_by_Code_Mapping'; 
+        String prefixName = 'Product_Family_by_Code_Mapping'; 
         String label = current.Name;
         String labelModify = label.replace(' ', '_');
         String fullName = prefixName + '.' + labelModify;
