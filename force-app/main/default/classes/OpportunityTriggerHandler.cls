@@ -43,6 +43,7 @@ public class OpportunityTriggerHandler extends TriggerHandler {
 
             String accInterestName = String.format('Opportunity: "{0}" with product code: "{1}" and name: "{2}"', parameters);
             if (opp.StageName == OPP_STAGE_CLOSED_WON) {
+                System.debug(opp);
                 accInterest.add(new Account_Interest__c(
                     Name = accInterestName,
                     Deal_Link__c = opp.id, 

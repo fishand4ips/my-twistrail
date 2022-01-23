@@ -194,6 +194,7 @@ export default class ServiceCaseQueueFiltered extends NavigationMixin(LightningE
         recordTypeId: '$objectInfo.data.defaultRecordTypeId',
         fieldApiName: STATUS_FIELD
     })
+    
     wiredPicklistValues({ error, data }) {
         if (data) {
             this.options = data.values.map(item => {

@@ -71,6 +71,25 @@ public with sharing class TestDEV {
         System.debug('theString::: ' + theString); // 3
     }
 
+    public static void question9from65() {
+        Pattern nonAlphanumeric = Pattern.compile('[^a-zA-Z0-9]');
+        String parentId = nonAlphanumeric.matcher(ApexPages.currentPage().getParameters().get('Id')).replaceAll('').escapeHtml4();
+        System.debug('test::: ' + parentId);
+    }
+
+    public static void question15from65() {
+        List<Case> casesToUpdate = new List<Case>();
+        for (Case thisCase : [SELECT Id, Status FROM Case LIMIT 50000]) {
+            thisCase.Status = 'Working';
+            casesToUpdate.add(thisCase);
+        }
+        try {
+            Database.update(casesToUpdate, false);
+        } catch(Exception e) {
+            System.debug(e.getMessage());
+        }
+    }
+
     abstract class CustomException extends Exception {}
     class NewCustomException extends CustomException {}
 
