@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <formulas>
+        <name>LeadScoreCompute</name>
+        <dataType>Number</dataType>
+        <expression>IF(ISBLANK({!recordId.Phone}),0,3) + 
+IF(ISBLANK ({!recordId.Email}),0,1) +
+IF(ISBLANK ({!recordId.Title}),0,1) +
+IF({!recordId.Number_of_Students__c} &gt;= 1 &amp;&amp; {!recordId.Number_of_Students__c} &lt;=25, 4, IF({!recordId.Number_of_Students__c} &gt; 26, 10, 0)) +
+IF({!recordId.Number_of_Sets_Required__c} &gt;= 1 &amp;&amp; {!recordId.Number_of_Sets_Required__c} &lt;=15, 4, IF({!recordId.Number_of_Sets_Required__c} &gt; 16, 8, 0))</expression>
+        <scale>0</scale>
+    </formulas>
+    <interviewLabel>Test {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Lead Score Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Lead_Info</name>
+        <label>Get Lead Info</label>
+        <locationX>176</locationX>
+        <locationY>386</locationY>
+        <assignNullValuesIfNoRecordsFound
+    >true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Record</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>currentId</elementReference>
+            </value>
+        </filters>
+        <object>Lead</object>
+        <outputReference>recordId</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Number_of_Students__c</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>LastName</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>Company</queriedFields>
+        <queriedFields>LeadSource</queriedFields>
+        <queriedFields>Status</queriedFields>
+        <queriedFields>Number_of_Sets_Required__c</queriedFields>
+        <queriedFields>Email</queriedFields>
+        <queriedFields>Phone</queriedFields>
+        <queriedFields>Title</queriedFields>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Record</name>
+        <label>Update Record</label>
+        <locationX>564</locationX>
+        <locationY>385</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>currentId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Lead_Score__c</field>
+            <value>
+                <elementReference>LeadScoreCompute</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Lead</object>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Get_Lead_Info</targetReference>
+        </connector>
+    </start>
+    <status>Obsolete</status>
+    <variables>
+        <name>currentId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Lead</objectType>
+    </variables>
+</Flow>

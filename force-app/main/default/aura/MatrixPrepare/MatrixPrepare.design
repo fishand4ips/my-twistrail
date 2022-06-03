@@ -1,0 +1,8 @@
+<design:component label="Account FS Component"> 
+    <design:attribute name="fieldSetName" label="Field Set Name" /> 
+    <sfdc:objects>
+        <sfdc:object>Account</sfdc:object>
+    </sfdc:objects>
+ </design:component>
+
+ 
